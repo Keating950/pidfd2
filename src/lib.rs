@@ -1,7 +1,8 @@
 //! Provides a safe interface for working with Linux pidfds.
 
 #![warn(clippy::pedantic)]
-use nix::{libc, sys::signal::Signal, unistd::Pid};
+use nix::libc;
+pub use nix::{sys::signal::Signal, unistd::Pid};
 use std::{
     io,
     os::fd::{AsRawFd, FromRawFd, OwnedFd, RawFd},
