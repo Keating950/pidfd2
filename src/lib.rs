@@ -4,7 +4,7 @@
 use nix::{libc, sys::signal::Signal, unistd::Pid};
 use std::{
     io,
-    os::fd::{AsRawFd, FromRawFd, OwnedFd},
+    os::fd::{AsRawFd, FromRawFd, OwnedFd, RawFd},
 };
 
 #[derive(Debug)]
@@ -71,6 +71,20 @@ impl PidFd {
             } else {
                 Err(io::Error::last_os_error())
             }
+        }
+    }
+}
+
+impl AsRawFd for PidFd {
+    fn as_raw_fd(&self) -> RawFd {
+        self.fd.as_raw_fd()
+    }
+}
+
+impl FromRawFd for PidFd {
+    unsafe fn from_raw_fd(fd: RawFd) -> Self {
+        PidFd {
+            fd: unsafe { OwnedFd::from_raw_fd(fd) },
         }
     }
 }
